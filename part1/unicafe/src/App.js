@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
 
+const Button = (props) => ( 
+  <button onClick={props.handleClick}>{props.text}</button>
+);
+
+const Statistics = (props) => <div>{props.text} {props.value}</div>
+
+const Header = props => <h1>{props.text}</h1>
+
 const App = () => {
 
   const [good, setGood] = useState(0)
@@ -7,35 +15,38 @@ const App = () => {
   const [bad, setBad] = useState(0)
 
   const total = good + bad + neutral;
-  const average = total / 3;
-  const positive = good / total * 100;
 
-  const handleClick = () => {
-        setGood(good + 1);
-    }
-    const handleClick2 = () => {
-        setNeutral(neutral + 1);
-    }
-    const handleClick3 = () => {
-        setBad(bad + 1);
-    }
+  const setToGood= newGood => {
+    setGood(newGood + 1);
+  }
+
+  const setToNeutral= newNeutral => {
+    setNeutral(newNeutral + 1);
+  }
+
+  const setToBad= newBad => {
+    setBad(newBad + 1);
+  }
 
   return (
     <div>
-        <h1>give feedback</h1>
-        <button onClick={handleClick}>good</button>
-        <button onClick={handleClick2}>neutral</button>
-        <button onClick={handleClick3}>bad</button>
+        <Header text={"Give Feedback"}/>
+  
+        <Button handleClick={() => setToGood(good)} text="Good" />
+        <Button handleClick={() => setToNeutral(neutral)} text="Neutral" />
+        <Button handleClick={() => setToBad(bad)} text="Bad" />
 
-        <h2>Statistics</h2>
-        <p>Good: {good}</p>
-        <p>Neutral: {neutral}</p>
-        <p>Bad: {bad}</p>
-        <p>All: {total} </p>
-        <p>Average: {average} </p>
-        <p>Positive: {positive}% </p>
+        <Header text={"Statistics"}/>
+
+        <Statistics text={"Good:"} value={good}/> 
+        <Statistics text={"Neutral:"} value={neutral}/> 
+        <Statistics text={"Bad:"} value={bad}/> 
+        <Statistics text={"Total:"} value={total}/> 
+        <Statistics text={"Average:"} value={total / 3}/> 
+        <Statistics text={"Positive:"} value={good / total * 100}/> 
+     
      </div>
-  )
+  );
 }
 
 export default App;
