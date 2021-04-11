@@ -4,7 +4,13 @@ const Button = (props) => (
   <button onClick={props.handleClick}>{props.text}</button>
 );
 
-const Statistics = (props) => <div>{props.text} {props.value}</div>
+const Statistics = (props) => (
+  <table>
+    <tr>
+      <td>{props.text} {props.value}</td>
+      </tr>
+  </table>    
+);
 
 const Header = props => <h1>{props.text}</h1>
 
