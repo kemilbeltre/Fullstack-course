@@ -12,6 +12,8 @@ const Statistics = (props) => (
   </table>    
 );
 
+const WarningNotUse = () => <p>No feedback given</p>
+
 const Header = props => <h1>{props.text}</h1>
 
 const App = () => {
@@ -43,16 +45,21 @@ const App = () => {
         <Button handleClick={() => setToBad(bad)} text="Bad" />
 
         <Header text={"Statistics"}/>
+          {(total === 0)
+          ? <WarningNotUse/>
+          : 
+        <div>
+          <Statistics text={"Good:"} value={good}/> 
+          <Statistics text={"Neutral:"} value={neutral}/> 
+          <Statistics text={"Bad:"} value={bad}/> 
+          <Statistics text={"Total:"} value={total}/> 
+          <Statistics text={"Average:"} value={total / 3}/> 
+          <Statistics text={"Positive:"} value={good / total * 100}/>
+        </div>
+          }
 
-        <Statistics text={"Good:"} value={good}/> 
-        <Statistics text={"Neutral:"} value={neutral}/> 
-        <Statistics text={"Bad:"} value={bad}/> 
-        <Statistics text={"Total:"} value={total}/> 
-        <Statistics text={"Average:"} value={total / 3}/> 
-        <Statistics text={"Positive:"} value={good / total * 100}/> 
-     
      </div>
-  );
+ );
 }
 
 export default App;
