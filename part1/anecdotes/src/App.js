@@ -5,11 +5,6 @@ const Button = ({ handleClick, text }) => (
     {text}
   </button>
 );
-const Votes = ({handleClick}) => (
-  <div>
-    has {handleClick} votes
-  </div>
-);
 
 const App = () => {
   const anecdotes = [
@@ -23,34 +18,52 @@ const App = () => {
     'Conceptual integrity is the most important consideration in system design.',
     'No matter what the problem is, its always a people problem.',
     'Hiring people to write code to sell is not the same as hiring people to design and build durable, usable, dependable software.'
-  ]
+  ];
+
+  const points = new Uint8Array(anecdotes.length);
 
   const [selected, setSelected] = useState(0);
-  const [voted, setVoted] = useState(0);
-
-  const handleClick = () => {
-    if (selected <= anecdotes.length - 2) setSelected(selected + 1);
-  }
+  const [voted, setVoted] = useState(points);
+  
   const handleVoteClick = () => {
-    setVoted(voted + 1);
-  }
+    const points = [...voted];
+    points[selected]++;
+    setVoted(points);
+  };
+  const handleNextClick = () => {
+    if (selected < anecdotes.length - 1) setSelected(selected + 1);
+  };
   const handleBackClick = () => {
     if (selected > 0) setSelected(selected - 1);
-  }     
+  };
+
+  const max = Math.max(...voted);
+
+  /**
+   *  iMax - the best index so far (the index of the max element so far, on the first iteration iMax = 0 because the second argument to reduce() is 0, we can't omit the second argument to reduce() in our case)
+     x - the currently tested element from the array
+     i - the currently tested index
+     voted - our array ([0, 0, 0...])
+  */
+  const indexOfMaxValue = voted.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
 
   return (
     <div>
-      <h1>Anecdote of the day</h1>
-      {anecdotes[selected]} <br></br>
-      <Votes handleClick = {voted}/>
-      <Button handleClick={handleBackClick} text= 'go back' />
-      <Button handleClick={handleVoteClick} text= 'vote' />
-      <Button handleClick={handleClick} text= 'next anecdote' />
-
-      <h1>Anecdote with most votes</h1>
-      <p>TODO</p>
+      <div>
+        <h1>Anecdote of the day</h1>
+        <p> {anecdotes[selected]} </p>
+        <p>This anectodes has: <strong> {voted[selected]} </strong> votes</p>
+        <Button handleClick={handleBackClick} text= 'go back' />
+        <Button handleClick={handleVoteClick} text= 'vote' />
+        <Button handleClick={handleNextClick} text= 'next anecdote' />
+      </div>
+      <div>
+        <h1>Anecdote with most votes</h1>
+        <p> {anecdotes[indexOfMaxValue]} </p>
+        <p>This anecdote has <strong>{max}</strong> votes</p>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default App;
