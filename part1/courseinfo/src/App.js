@@ -3,22 +3,20 @@ import React from 'react';
 /* 
 const Title = ({course}) => <h1>{}
 */
-const Header = ({course}) => <h1>{course}</h1>;
-const Content = ({parts}) => {
+const Header = props => <h1>{props.course}</h1>;
+const Content = props => {
   return (
     <div>
-     {parts.map((part) => (
+     {props.parts.map((part) => (
      <p>{part.name} {part.exercises}</p>
       ))}
     </div>
   );
 }
-const Total = ({parts}) => {
-  return (
-    <div>
-     <p><b> Total of {parts[0].exercises + parts[1].exercises + parts[2].exercises} exercises </b></p>
-    </div>
-  );
+const Total = props => {
+  const total = props.parts.reduce(
+    (s, p) => s + p.exercises, 0);
+  return <p> <b> Total of {total} exercises</b> </p>;
 }
 
 const App = () => {
@@ -40,9 +38,15 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
-  }
+  };
+
   return (
     <div>
      <Header course = {course.name} />
@@ -50,6 +54,6 @@ const App = () => {
      <Total parts={course.parts}/>
     </div>
   );
-}
+};
 
  export default App;
