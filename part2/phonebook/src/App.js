@@ -15,11 +15,18 @@ const App = () => {
     const nameToAddToState = {
       name: newName
     };
-    setPersons(persons.concat(nameToAddToState));
-    setNewName("");
-  
-    console.log("Nombre agregado");
-    console.log(newName);
+
+    const isAdded = persons.map((person) => person.name);
+
+    if (! isAdded.includes(newName)) {
+        setPersons(persons.concat(nameToAddToState));
+        setNewName("");
+
+        console.log("Nombre agregado");
+        console.log(newName);
+    } else { 
+      alert(`${newName} is already added to phonebook`);
+    }
   }
 
   return (
