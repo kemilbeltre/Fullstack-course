@@ -1,22 +1,31 @@
 import { React, useState } from "react";
 
-import Filter from "./Filter";
-import Countries from "./Countries";
+import Filter from "./Components/Filter";
+import { Countries, useCountries } from "./Components/Countries";
 
 const App = () => {
-  const [searchCountries, setSearchCountries] = useState("");
+  const [filter, setFilter] = useState("");
+  const { countries } = useCountries();
 
   const handleChangeSearchCountries = (event) => {
-    setSearchCountries(event.target.value);
+    setFilter(event.target.value);
+  };
+  const showCountry = (event) => {
+    event.preventDefault();
+    setFilter(event.target.value);
   };
 
   return (
     <div>
       <Filter
         handleChangeSearchCountries={handleChangeSearchCountries}
-        searchCountries={searchCountries}
+        searchCountries={filter}
       />
-      <Countries searchCountries={searchCountries} />
+      <Countries
+        filter={filter}
+        countries={countries}
+        showCountry={showCountry}
+      />
     </div>
   );
 };
