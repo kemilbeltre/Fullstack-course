@@ -1,23 +1,13 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-
+import React from "react";
 import Country from "./Country";
 
-const url = "https://restcountries.eu/rest/v2/all";
-
-export const useCountries = () => {
-  const [countries, setCountries] = useState([]);
-
-  useEffect(() => {
-    axios.get(url).then((response) => {
-      setCountries(response.data);
-    });
-  }, []);
-
-  return { countries, setCountries };
-};
-
-export const Countries = ({ filter, countries, showCountry }) => {
+export const Countries = ({
+  filter,
+  countries,
+  weather,
+  showCountry,
+  handleCountryChange,
+}) => {
   const countriesFiltered = countries.filter((country) =>
     country.name.toLowerCase().includes(filter.toLowerCase())
   );
@@ -25,9 +15,10 @@ export const Countries = ({ filter, countries, showCountry }) => {
   if (countriesFiltered.length === countries.length) {
     return <div></div>;
   } else if (countriesFiltered.length === 1) {
+    handleCountryChange(countriesFiltered[0].capital);
     return (
       <div key={countriesFiltered[0].name}>
-        <Country country={countriesFiltered[0]} />
+        <Country country={countriesFiltered[0]} weather={weather} />
       </div>
     );
   } else if (countriesFiltered.length <= 10) {
