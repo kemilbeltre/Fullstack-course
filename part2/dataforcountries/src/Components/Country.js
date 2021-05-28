@@ -24,7 +24,7 @@ const Country = ({ country, weather }) => {
         </div>{" "}
         <br />
         <div>
-          <h2> Wether in {country.capital}</h2>
+          <h2> Weather in {country.capital}</h2>
           <p>
             <b>temperature: </b> {weather["current"].temperature} º
           </p>

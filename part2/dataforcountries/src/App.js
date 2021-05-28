@@ -8,7 +8,7 @@ const App = () => {
   const [countries, setCountries] = useState([]);
   const [weather, setWeather] = useState([]);
   const [filter, setFilter] = useState("");
-  const [newAccessKey, setNewAccessKey] = useState("");
+  const [newAccessKey, setNewAccessKey] = useState(process.env.REACT_APP_API_KEY);
   const [capitalCity, setCapitalCity] = useState("Madrid");
 
   const urlWeather = "http://api.weatherstack.com/current?access_key=";
