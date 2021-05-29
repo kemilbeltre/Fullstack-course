@@ -8,3 +8,5 @@ The course covers testing, configuration and environment management, and the use
 The course is worth 5-12 credits, and the content is the same as in the Full stack course held at the Department of Computer Science at the University of Helsinki in Spring 2020. 
 
 Part 0 of the course material goes through the content and conduct of the course in more detail. Make sure to read the material and instructions thoroughly.
+
+###### If you need more information about this courses visit the official website [Fullstack Course](https://fullstackopen.com/ "Fullstack Course Home page") 
