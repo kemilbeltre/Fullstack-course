@@ -1,14 +1,22 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import Filter from "./Components/Filter.js";
 import PersonForm from "./Components/PersonForm.js";
 import { Persons } from "./Components/Persons.js";
-import { usePersons } from "./Persons.service.js";
+import PersonsService from "./Services/Persons.service";
 
 const App = () => {
-  const { persons, setPersons } = usePersons([]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [searchContacts, setSearchContacts] = useState("");
+
+  useEffect(() => {
+    PersonsService
+      .getPersons()
+      .then(response => {
+        setPersons(response.data);
+      })
+  }, []);
 
   const handleChangeName = (event) => {
     setNewName(event.target.value);
@@ -26,6 +34,13 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
+
+    PersonsService
+      .postPersons(dataToAddToState)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        console.log(persons);
+      });
 
     const isAdded = persons.map((person) => person.name);
 
