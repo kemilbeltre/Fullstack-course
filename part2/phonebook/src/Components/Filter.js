@@ -1,14 +1,14 @@
 import React from "react";
 
-const Filter = ({ handleFilterChange, filter }) => {
+const Filter = ({ onChange, value }) => {
   return (
     <div>
       <p>filter shown with</p>
       <input
         type="text"
         placeholder="Search..."
-        onChange={handleFilterChange}
-        value={filter}
+        onChange={onChange}
+        value={value}
       />
     </div>
   );

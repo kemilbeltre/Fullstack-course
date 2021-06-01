@@ -25,7 +25,7 @@ const App = () => {
     const id = parseInt(event.target.value);
     const name = persons[id - 1].name;
     PersonService.remove(persons[id - 1]).catch((error) => {
-      setMessageType("error");
+      setMessageType(error);
       setMessage(`Information of ${name} has already been removed from server`);
       setTimeout(() => {
         setMessage(null);
@@ -69,15 +69,10 @@ const App = () => {
     return;
   };
 
-  const handleChangeName = (event) => {
-    setNewName(event.target.value);
-  };
-  const handleChangeNumber = (event) => {
-    setNewNumber(event.target.value);
-  };
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
-  };
+  const handleChangeName = (event) => setNewName(event.target.value);
+  const handleChangeNumber = (event) => setNewNumber(event.target.value);
+  const handleFilterChange = (event) => setFilter(event.target.value);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const dataToAddToState = {
@@ -102,7 +97,7 @@ const App = () => {
 
       <Notification message={message} messageType={messageType} />
 
-      <Filter handleFilterChange={handleFilterChange} filter={filter} />
+      <Filter onChange={handleFilterChange} value={filter} />
 
       <h2>add a new</h2>
 

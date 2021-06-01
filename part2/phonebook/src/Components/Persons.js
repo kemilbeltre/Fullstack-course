@@ -3,7 +3,7 @@ import Person from "./Person";
 
 export const Persons = ({ persons, filter, deletePerson }) => {
   return persons
-    .filter((person) => person.name.includes(filter))
+    .filter((person) => person.name.toLowerCase().includes(filter.toLowerCase()))
     .map((person) => (
       <span key={person.id}>
         <Person name={person.name} number={person.number} />
