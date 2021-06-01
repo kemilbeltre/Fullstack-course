@@ -25,8 +25,8 @@ const App = () => {
     const id = parseInt(event.target.value);
     const name = persons[id - 1].name;
     PersonService.remove(persons[id - 1]).catch((error) => {
-      setMessageType(error);
-      setMessage(`Information of ${name} has already been removed from server`);
+      setMessageType("error");
+      setMessage(`Information of ${name} was already removed from server`);
       setTimeout(() => {
         setMessage(null);
         setMessageType("error");
