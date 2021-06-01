@@ -1,21 +1,23 @@
 import { React, useState, useEffect } from "react";
-import Filter from "./Components/Filter.js";
-import PersonForm from "./Components/PersonForm.js";
-import { Persons } from "./Components/Persons.js";
-import PersonsService from "./Services/Persons.service";
+
+import { Persons } from "./Components/Persons";
+import Notification from "./Components/Notification";
+import Filter from "./Components/Filter";
+import PersonForm from "./Components/PersonForm";
+import PersonService from "./Services/Person.service";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
-  const [searchContacts, setSearchContacts] = useState("");
+  const [filter, setFilter] = useState("");
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
   useEffect(() => {
-    PersonsService
-      .getPersons()
-      .then(response => {
-        setPersons(response.data);
-      })
+    PersonService.getAll().then((response) => {
+      setPersons(response.data);
+    });
   }, []);
 
   const handleChangeName = (event) => {
@@ -24,8 +26,56 @@ const App = () => {
   const handleChangeNumber = (event) => {
     setNewNumber(event.target.value);
   };
-  const handleChangeSearchContacts = (event) => {
-    setSearchContacts(event.target.value);
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const deletePerson = (event) => {
+    event.preventDefault();
+    const id = parseInt(event.target.value);
+    const name = persons[id - 1].name;
+    PersonService.remove(persons[id - 1]).catch((error) => {
+      setMessageType("error");
+      setMessage(`Information of ${name} has already been removed from server`);
+      setTimeout(() => {
+        setMessage(null);
+        setMessageType("error");
+      }, 5000);
+      setPersons(persons.filter((n) => n.id !== id));
+    });
+    setPersons(persons.filter((n) => n.id !== id));
+  };
+
+  const postPerson = (newObject) => {
+    PersonService.post(newObject).then((response) => {
+      setPersons(persons.concat(response.data));
+      setNewName("");
+      setNewNumber("");
+      setMessageType("confirmation");
+      setMessage(`Added ${newName}`);
+      setTimeout(() => {
+        setMessage(null);
+        setMessageType(null);
+      }, 5000);
+    });
+  };
+
+  const updatePerson = (check, newObject, name) => {
+    PersonService.update(check.id, newObject).then((returnedPerson) => {
+      if (
+        window.confirm(`${name} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        setPersons(
+          persons.map((person) =>
+            person.id !== check.id ? person : returnedPerson
+          )
+        );
+      }
+      setNewName("");
+      setNewNumber("");
+    });
+    return;
   };
 
   const handleSubmit = (event) => {
@@ -34,25 +84,15 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
+    const personCheck = persons.find((person) => person.name === newName);
 
-    PersonsService
-      .postPersons(dataToAddToState)
-      .then(response => {
-        setPersons(persons.concat(response.data))
-        console.log(persons);
-      });
-
-    const isAdded = persons.map((person) => person.name);
-
-    if (!isAdded.includes(newName)) {
-      setPersons(persons.concat(dataToAddToState));
-      setNewName("");
-      setNewNumber("");
-
-      console.log("Person added");
-      console.log(`With the name: ${newName} and number: ${newNumber}`);
+    if (
+      typeof personCheck !== "undefined" &&
+      personCheck.number !== newNumber
+    ) {
+      updatePerson(personCheck, dataToAddToState, newName);
     } else {
-      alert(`${newName} is already added to phonebook`);
+      postPerson(dataToAddToState);
     }
   };
 
@@ -60,10 +100,9 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Filter
-        handleChangeSearchContacts={handleChangeSearchContacts}
-        searchContacts={searchContacts}
-      />
+      <Notification message={message} messageType={messageType} />
+
+      <Filter handleFilterChange={handleFilterChange} filter={filter} />
 
       <h2>add a new</h2>
 
@@ -77,7 +116,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <Persons persons={persons} searchContacts={searchContacts} />
+      <Persons persons={persons} filter={filter} deletePerson={deletePerson} />
     </div>
   );
 };

@@ -1,29 +1,14 @@
 import React from "react";
+import Person from "./Person";
 
-export const Persons = (props) => {
-  const { persons, searchContacts } = props;
-  return (
-    <div>
-      {persons
-        .filter((person) => {
-          if (searchContacts === " ") {
-            return person;
-          } else if (searchContacts) {
-            const results = person.name
-              .toLowerCase()
-              .includes(searchContacts.toLowerCase());
-            return results;
-          } else {
-            return person;
-          }
-        })
-        .map((person) => {
-          return (
-            <p key={person.name}>
-              {person.name} {person.number}
-            </p>
-          );
-        })}
-    </div>
-  );
+export const Persons = ({ persons, filter, deletePerson }) => {
+  return persons
+    .filter((person) => person.name.includes(filter))
+    .map((person) => (
+      <span key={person.id}>
+        <Person name={person.name} number={person.number} />
+        {'  '}
+        <button type="button" value={person.id} onClick={deletePerson}>delete</button> <br />
+      </span>
+    ));
 };
