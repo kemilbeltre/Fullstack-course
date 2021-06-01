@@ -20,16 +20,6 @@ const App = () => {
     });
   }, []);
 
-  const handleChangeName = (event) => {
-    setNewName(event.target.value);
-  };
-  const handleChangeNumber = (event) => {
-    setNewNumber(event.target.value);
-  };
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
-  };
-
   const deletePerson = (event) => {
     event.preventDefault();
     const id = parseInt(event.target.value);
@@ -63,7 +53,8 @@ const App = () => {
   const updatePerson = (check, newObject, name) => {
     PersonService.update(check.id, newObject).then((returnedPerson) => {
       if (
-        window.confirm(`${name} is already added to phonebook, replace the old number with a new one?`
+        window.confirm(
+          `${name} is already added to phonebook, replace the old number with a new one?`
         )
       ) {
         setPersons(
@@ -78,6 +69,15 @@ const App = () => {
     return;
   };
 
+  const handleChangeName = (event) => {
+    setNewName(event.target.value);
+  };
+  const handleChangeNumber = (event) => {
+    setNewNumber(event.target.value);
+  };
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     const dataToAddToState = {
