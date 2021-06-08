@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+app.use(express.json());
+
 let persons = [
   {
     name: "Arto Hellas",
@@ -40,6 +42,37 @@ app.get("/api/persons/:id", (req, res) => {
   } else {
     res.status(404).end();
   }
+});
+
+const generateId = () => {
+  const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
+  return maxId + 1;
+};
+
+app.post("/api/persons", (request, response) => {
+  const { name, number } = request.body;
+
+  if (!name.content || !number.content) {
+    return response.status(400).json({
+      error: "content missing",
+    });
+  }
+
+  person = {
+    name,
+    number,
+    id: generateId(),
+  };
+
+  persons = persons.concat(person);
+  response.json(person);
+});
+
+app.delete("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  persons = persons.filter((person) => person.id !== id);
+
+  res.status(204).end();
 });
 
 app.get("/info", (req, res) => {
