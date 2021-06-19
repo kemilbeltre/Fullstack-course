@@ -1,4 +1,8 @@
 
+#  production
+part3/phonebook/api/build
+
+# others
 part2/dataforcountries/.env
 
 part2/phonebook/db.json
