@@ -45,9 +45,18 @@ app.get('/api/persons', (request, response) => {
 });
 
 app.get('/api/persons/:id', (request, response) => {
-  Person.findById(request.params.id).then((person) => {
-    response.json(person);
-  });
+  Person.findById(request.params.id)
+    .then((person) => {
+      if (person) {
+        response.json(person);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      response.status(500).end();
+    });
 });
 
 app.post('/api/persons', (request, response) => {
