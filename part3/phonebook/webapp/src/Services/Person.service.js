@@ -15,12 +15,10 @@ const update = async (id, newObject) => {
   return request.then((response) => response.data);
 };
 
-const remove = async (person) => {
-  if (window.confirm(`Delete ${person.name}?`)) {
+const remove = async (id) => {
     return axios
-      .delete(`${baseUrl}/${person.id}`)
+      .delete(`${baseUrl}/${id}`)
       .then((response) => response.data);
-  }
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
