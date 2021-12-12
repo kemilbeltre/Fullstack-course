@@ -1,24 +1,25 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseUrl = "/api/persons";
+const baseUrl = '/api/persons';
 
 const getAll = async () => {
-  return await axios.get(baseUrl);
+  const request = await axios.get(baseUrl);
+  return request.then((response) => response.data);
 };
 
-const post = (personObject) => {
-  return axios.post(baseUrl, personObject);
+const post = async (personObject) => {
+  const request = await axios.post(baseUrl, personObject);
+  return request.then((response) => response.data);
 };
 
 const update = async (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject);
+  const request = await axios.put(`${baseUrl}/${id}`, newObject);
   return request.then((response) => response.data);
 };
 
 const remove = async (id) => {
-    return axios
-      .delete(`${baseUrl}/${id}`)
-      .then((response) => response.data);
+  const request = await axios.delete(`${baseUrl}/${id}`)
+  return request.then((response) => response.data);
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -26,5 +27,5 @@ export default {
   getAll,
   post,
   update,
-  remove,
+  remove
 };
