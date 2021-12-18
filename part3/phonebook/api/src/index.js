@@ -38,6 +38,48 @@ app.use(
   })
 );
 
+app.post('/api/persons', (request, response, next) => {
+  const { name, number } = request.body;
+
+  if (!name || !number) {
+    return response.status(400).json({
+      error: 'content missing'
+    });
+  }
+
+  const person = new Person({
+    name: name,
+    number: number
+  });
+
+  person
+      .save()
+      .then(savedPerson => savedPerson.toJSON())
+      .then(savedAndFormattedPerson => response.json(savedAndFormattedPerson))
+      .catch(error => next(error))
+});
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const { name, number } = request.body;
+  const person = {
+    name: name,
+    number: number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+      .then(updatedPerson => response.json(updatedPerson.toJSON()))
+      .catch(error => next(error))
+})
+
+
+app.get('/info', (request, response) => {
+  Person.find({})
+      .then(persons => {
+        response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`)
+      });
+});
+
+
 app.get('/api/persons', (request, response) => {
   Person.find({}).then((persons) => {
     response.json(persons);
@@ -52,35 +94,10 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch((error) => next(error));
 });
 
-app.post('/api/persons', (request, response) => {
-  const { name, number } = request.body;
-
-  if (!name || !number) {
-    return response.status(400).json({
-      error: 'content missing'
-    });
-  }
-
-  const person = new Person({
-    name: name,
-    number: number
-  });
-
-  person.save().then((savedPerson) => {
-    response.json(savedPerson);
-  });
-});
-
-app.delete('/api/persons/:id', (req, res, next) => {
-  Person.findByIdAndRemove(req.params.id)
-    .then((result) => res.status(204).end())
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then(() => response.status(204).end())
     .catch((error) => next(error));
-});
-
-app.get('/info', (req, res) => {
-  res.send(
-    `<p>Phonebook has info for ${Person.length} people</p><p>${new Date()}</p>`
-  );
 });
 
 const unknownEndpoint = (request, response, next) => {

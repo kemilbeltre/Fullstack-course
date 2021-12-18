@@ -1,22 +1,24 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseUrl = "/api/persons";
+const baseUrl = '/api/persons';
 
 const getAll = async () => {
-  return await axios.get(baseUrl);
+  return axios.get(baseUrl);
 };
 
 const post = (personObject) => {
   return axios.post(baseUrl, personObject);
 };
 
+
 const update = async (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject);
-  return request.then((response) => response.data);
+  return axios
+      .put(`${baseUrl}/${id}`, newObject)
+      .then((response) => response.data);
 };
 
 const remove = async (id) => {
-    return axios
+  return axios
       .delete(`${baseUrl}/${id}`)
       .then((response) => response.data);
 };
@@ -26,5 +28,5 @@ export default {
   getAll,
   post,
   update,
-  remove,
+  remove
 };
