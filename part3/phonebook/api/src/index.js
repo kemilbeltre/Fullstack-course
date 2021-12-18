@@ -71,14 +71,14 @@ app.post('/api/persons', (request, response) => {
   });
 });
 
-app.delete('/api/persons/:id', (req, res, next) => {
-  Person.findByIdAndRemove(req.params.id)
-    .then((result) => res.status(204).end())
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then(() => response.status(204).end())
     .catch((error) => next(error));
 });
 
-app.get('/info', (req, res) => {
-  res.send(
+app.get('/info', (request, response) => {
+  response.send(
     `<p>Phonebook has info for ${Person.length} people</p><p>${new Date()}</p>`
   );
 });

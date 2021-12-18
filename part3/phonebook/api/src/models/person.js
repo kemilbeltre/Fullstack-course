@@ -1,3 +1,4 @@
+require('dotenv').config({path: '../../.env'});
 const mongoose = require('mongoose');
 
 const url = process.env.MONGODB_URI;
@@ -9,7 +10,7 @@ mongoose
     useFindAndModify: false,
     useCreateIndex: true
   })
-  .then((result) => {
+  .then(() => {
     console.log('connected to MongoDB');
   })
   .catch((error) => {
