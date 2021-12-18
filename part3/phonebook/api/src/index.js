@@ -38,7 +38,7 @@ app.use(
   })
 );
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const { name, number } = request.body;
 
   if (!name || !number) {
@@ -52,9 +52,11 @@ app.post('/api/persons', (request, response) => {
     number: number
   });
 
-  person.save().then((savedPerson) => {
-    response.json(savedPerson);
-  });
+  person
+      .save()
+      .then(savedPerson => savedPerson.toJSON())
+      .then(savedAndFormattedPerson => response.json(savedAndFormattedPerson))
+      .catch(error => next(error))
 });
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -71,9 +73,10 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 
 app.get('/info', (request, response) => {
-  response.send(
-      `<p>Phonebook has info for ${Person.length} people</p><p>${new Date()}</p>`
-  );
+  Person.find({})
+      .then(persons => {
+        response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`)
+      });
 });
 
 
